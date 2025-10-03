@@ -39,4 +39,8 @@ public class GameService {
         game.makeAmove(user, symbolType, x, y);
         this.gameRepository.save(game);
     }
+
+    public Game getGameById(String gameId) throws NullPointerException {
+        return this.gameRepository.findGameById(gameId).orElseThrow();
+    }
 }

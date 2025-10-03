@@ -20,7 +20,7 @@ The system is composed of a backend and a frontend
       (to be run from the package root, where `pom.xml` is located)
   
   - Notes about the design and implementation: 
-    - `ttt_backend.TTTBackendController` is a big monolitic controller, a reactive event-loop based component implemented as Vert.x verticle. The controller receives HTTP requests (port `8080`) and processes them. The requests can be: 
+    - `ttt_backend.adapters.in.TTTBackendController` is a big monolitic controller, a reactive event-loop based component implemented as Vert.x verticle. The controller receives HTTP requests (port `8080`) and processes them. The requests can be: 
       - **to register a new user** to the game server, given its user name. 
         - It generates a unique user id. An hash map `users` is used to keep track of the set of registered users (class (`ttt_backend.domain.model.User`). 
         - A simple JSON dbase (`users.json` file) is used to persist the set of registered users.  
