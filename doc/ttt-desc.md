@@ -22,9 +22,9 @@ The system is composed of a backend and a frontend
   - Notes about the design and implementation: 
     - `ttt_backend.TTTBackendController` is a big monolitic controller, a reactive event-loop based component implemented as Vert.x verticle. The controller receives HTTP requests (port `8080`) and processes them. The requests can be: 
       - **to register a new user** to the game server, given its user name. 
-        - It generates a unique user id. An hash map `users` is used to keep track of the set of registered users (class (`ttt_backend.User`). 
+        - It generates a unique user id. An hash map `users` is used to keep track of the set of registered users (class (`ttt_backend.domain.model.User`). 
         - A simple JSON dbase (`users.json` file) is used to persist the set of registered users.  
-      - **to create a new game**. Each game has its own game id and it is represented by the class `ttt_backend.Game`. An hash map `games` is used to keep track of the ongoing games.
+      - **to create a new game**. Each game has its own game id and it is represented by the class `ttt_backend.domain.model.Game`. An hash map `games` is used to keep track of the ongoing games.
         - a game has a state: it starts from `WAITING_FOR_PLAYER` meaning that we are waiting for another player to join, `PLAYING` when another player  joined and the two players can play, `FINISHED` when the game is ended.
       - **to join an existing game**, given a game id, a user id and the symbol to be used (cross or circle)
         - when a user joins a game, a websocket is created to notify game events
