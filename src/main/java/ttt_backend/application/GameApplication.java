@@ -47,7 +47,8 @@ public class GameApplication {
      */
     public void startGame(String gameId) throws CannotStartGameException {
         final Game game = this.gameRepository.getGameById(gameId).orElseThrow();
-        game.start();
+        if (game.bothPlayersJoined())
+            game.start();
     }
 
     /**
