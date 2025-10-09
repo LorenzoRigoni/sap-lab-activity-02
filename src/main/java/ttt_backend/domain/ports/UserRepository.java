@@ -2,6 +2,8 @@ package ttt_backend.domain.ports;
 
 import ttt_backend.domain.models.User;
 
+import java.util.Optional;
+
 /**
  * This interface represents the port for the users' repository.
  */
@@ -11,8 +13,9 @@ public interface UserRepository {
      * Save the user in the repository.
      *
      * @param user the user to save
+     * @return the user saved
      */
-    void save(User user);
+    User save(User user);
 
     /**
      * Get the user saved.
@@ -20,5 +23,5 @@ public interface UserRepository {
      * @param id the id of the user
      * @return the user
      */
-    User getUserById(int id);
+    Optional<User> getUserById(String id);
 }
