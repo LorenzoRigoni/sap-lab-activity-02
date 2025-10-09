@@ -13,6 +13,9 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.*;
 import io.vertx.ext.web.*;
 import io.vertx.ext.web.handler.StaticHandler;
+import ttt_backend.domain.models.Game;
+import ttt_backend.domain.models.User;
+
 import java.io.*;
 
 /**

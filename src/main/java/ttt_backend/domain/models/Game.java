@@ -1,4 +1,4 @@
-package ttt_backend;
+package ttt_backend.domain.models;
 
 import java.util.HashMap;
 import java.util.Optional;
