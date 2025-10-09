@@ -4,6 +4,8 @@ import ttt_backend.domain.models.*;
 import ttt_backend.domain.ports.GameRepository;
 import ttt_backend.domain.ports.UserRepository;
 
+import java.util.Optional;
+
 /**
  * This class represents the application of the architecture.
  */
@@ -40,6 +42,17 @@ public class GameApplication {
     }
 
     /**
+     * Check if the game can start.
+     *
+     * @param gameId the id of the game
+     * @return true if the game can start, false otherwise
+     */
+    public boolean isGameReadyToStart(String gameId){
+        final Optional<Game> game = this.gameRepository.getGameById(gameId);
+        return game.map(Game::bothPlayersJoined).orElse(false);
+    }
+
+    /**
      * Start the game.
      *
      * @param gameId the ID of the game to start
@@ -47,8 +60,7 @@ public class GameApplication {
      */
     public void startGame(String gameId) throws CannotStartGameException {
         final Game game = this.gameRepository.getGameById(gameId).orElseThrow();
-        if (game.bothPlayersJoined())
-            game.start();
+        game.start();
     }
 
     /**

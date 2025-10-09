@@ -18,16 +18,9 @@ public class JsonUserRepository extends JsonRepository implements UserRepository
         try {
             final JsonArray users = getJsonContent(FILE_PATH);
 
-            final Optional<JsonObject> existingUser = users.stream()
-                    .map(obj -> (JsonObject) obj)
-                    .filter(u -> u.getString("id").equals(user.id()))
-                    .findFirst();
-
-            if (existingUser.isPresent()) {
-                existingUser.get().put("username", user.name());
-            } else {
-                users.add(JsonObject.mapFrom(user));
-            }
+            users.add(new JsonObject()
+                    .put("id", user.id())
+                    .put("username", user.name()));
 
             saveOnJsonFile(FILE_PATH, users);
 
@@ -43,7 +36,8 @@ public class JsonUserRepository extends JsonRepository implements UserRepository
             final JsonArray users = getJsonContent(FILE_PATH);
 
             return users.stream()
-                    .map(obj -> ((JsonObject) obj).mapTo(User.class))
+                    .map(obj -> ((JsonObject) obj))
+                    .map(o -> new User(o.getString("id"), o.getString("username")))
                     .filter(u -> u.id().equals(id))
                     .findFirst();
         } catch (IOException e) {

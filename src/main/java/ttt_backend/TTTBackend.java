@@ -3,7 +3,7 @@ package ttt_backend;
 import io.vertx.core.Vertx;
 import ttt_backend.application.GameApplication;
 import ttt_backend.infrastucture.apis.GameAPI;
-import ttt_backend.infrastucture.databases.JsonGameRepository;
+import ttt_backend.infrastucture.databases.MapGameRepository;
 import ttt_backend.infrastucture.databases.JsonUserRepository;
 
 public class TTTBackend {
@@ -16,7 +16,7 @@ public class TTTBackend {
      */
     public static void main(String[] args) {
         final var vertx = Vertx.vertx();
-        final var application = new GameApplication(new JsonUserRepository(), new JsonGameRepository());
+        final var application = new GameApplication(new JsonUserRepository(), new MapGameRepository());
         vertx.deployVerticle(new GameAPI(application, BACKEND_PORT));
     }
 }

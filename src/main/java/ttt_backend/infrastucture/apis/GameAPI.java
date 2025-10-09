@@ -27,30 +27,25 @@ public class GameAPI extends VerticleBase {
         logger.setLevel(Level.INFO);
     }
 
-
     @Override
     public Future<?> start() {
         logger.log(Level.INFO, "TTT Server initializing...");
 
         final HttpServer server = vertx.createHttpServer();
-
         final Router router = Router.router(vertx);
-        router.route(HttpMethod.POST, "/api/registerUser").handler(this::registerUser);
-        router.route(HttpMethod.POST, "/api/createGame").handler(this::createNewGame);
-        router.route(HttpMethod.POST, "/api/joinGame").handler(this::joinGame);
-        router.route(HttpMethod.POST, "/api/makeAMove").handler(this::makeAMove);
+
+        router.post("/api/registerUser").handler(this::registerUser);
+        router.post("/api/createGame").handler(this::createNewGame);
+        router.post("/api/joinGame").handler(this::joinGame);
+        router.post("/api/makeAMove").handler(this::makeAMove);
+        router.route("/api/events").handler(ctx -> {});
 
         handleEventSubscription(server);
 
         router.route("/public/*").handler(StaticHandler.create());
 
-        final var future = server
-                .requestHandler(router)
-                .listen(port);
-
-        future.onSuccess(res -> logger.log(Level.INFO, "TTT Server started on port " + port));
-
-        return future;
+        return server.requestHandler(router).listen(port)
+                .onSuccess(r -> logger.log(Level.INFO, "TTT Server started on port " + port));
     }
 
     protected void registerUser(RoutingContext context) {
@@ -223,13 +218,15 @@ public class GameAPI extends VerticleBase {
                  * the game can start
                  *
                  */
-                try {
-                    this.application.startGame(gameId);
-                    final var evGameStarted = new JsonObject();
-                    evGameStarted.put("event", "game-started");
-                    eb.publish(gameAddress, evGameStarted);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                if (this.application.isGameReadyToStart(gameId)) {
+                    try {
+                        this.application.startGame(gameId);
+                        final var evGameStarted = new JsonObject();
+                        evGameStarted.put("event", "game-started");
+                        eb.publish(gameAddress, evGameStarted);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             });
         });
